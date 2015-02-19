@@ -34,11 +34,10 @@
 
       <hr />
 
-      <ul class="message-list"></ul>
+      <h3>Messages</h3>
+      <div class="message-list"></div>
 
     </div>
-
-
 
     <script src="jquery.min.js"></script>
     <script src="lodash.min.js"></script>
@@ -50,61 +49,28 @@
 
         $(start);
 
-        function start() {
+        // start and all it's glory should probably be moved to a high level app componet (one that maanages all the others)
 
+        function start() {
           var list, filters, messageBus;
 
-          // faking the messageBus for now
-          messageBus = (function() {
-            var self, subscribers = {};
+          list = buildMessageList();
 
-            self = {
-              publish: publish,
-              subscribe: subscribe
-            };
+          messageBus = demo.MessageBus();
+          messageBus.subscribe('filters:updated', list, list.render);
 
-            return self;
+          filters = buildFilterList(messageBus);
+        }
 
-            function subscribe(topic, subscriber, handler) {
-              subscribers[topic] = subscribers[topic] || [];
-
-              subscribers[topic].push({
-                sub: subscriber,
-                handler: handler
-              });
-
-              return self;
-            }
-
-            function publish(name, data) {
-              console.log('message bus triggered', name, data);
-
-              var targets = subscribers[name];
-
-              if (!targets) {
-                console.log('no targets for ', name);
-                return;
-              }
-
-              targets.forEach(function callTargetHandler(target) {
-                // call the handler function, setting the subscribing argument as the `this` context
-                target.handler.call(target.sub, data);
-              });
-            }
-          })();
-
-          list = demo.MessageList({
+        function buildMessageList() {
+          return demo.MessageList({
             view: $('.message-list'),
             dom: $
           });
+        }
 
-          list.render([
-            {
-              message: 'Hello There'
-            }
-          ]);
-
-          filters = demo.FilterList({
+        function buildFilterList(messageBus) {
+          return demo.FilterList({
             view: $('.filter-list'),
             dom: $
           }, messageBus);
