@@ -12,22 +12,22 @@
       <ul class="filter-list">
         <li>
           <label for="">
-            <input type="checkbox" value="one" /> One
+            <input name="one" type="checkbox" value="one" /> One
           </label>
         </li>
         <li>
           <label for="">
-            <input type="checkbox" value="two" /> Two
+            <input name="two" type="checkbox" value="two" /> Two
           </label>
         </li>
         <li>
           <label for="">
-            <input type="checkbox" value="three" /> Three
+            <input name="three" type="checkbox" value="three" /> Three
           </label>
         </li>
         <li>
           <label for="">
-            <input type="checkbox" value="four" /> Four
+            <input name="four" type="checkbox" value="four" /> Four
           </label>
         </li>
       </ul>
@@ -52,7 +52,17 @@
 
         function start() {
 
-          var list = demo.MessageList({
+          var list, filters, messageBus;
+
+          // faking the messageBus for now
+          messageBus = {
+            trigger: function(name, data) {
+              console.log('message bus triggered', name, data);
+            }
+          };
+
+
+          list = demo.MessageList({
             view: $('.message-list'),
             dom: $
           });
@@ -62,6 +72,11 @@
               message: 'Hello There'
             }
           ]);
+
+          filters = demo.FilterList({
+            view: $('.filter-list'),
+            dom: $
+          }, messageBus);
         }
 
       })(jQuery, demo);

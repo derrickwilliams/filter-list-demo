@@ -5,6 +5,7 @@
   var demo = global.demo = {};
 
   demo.MessageList = MessageList;
+  demo.FilterList = FilterList;
 
   function MessageList(params) {
     var
@@ -37,6 +38,32 @@
     function getItemNode(item) {
       return dom('<li />').text(item.message);
     }
+  }
+
+  function FilterList(params, messageBus) {
+    var
+      self = {},
+      view = params.view,
+      dom = params.dom;
+
+    // this could and should probably be move to an init function. maybe later.
+    view.on('click', '[type=checkbox]', function handleFilterClick(e) {
+      var
+        allChecked = view.find(':checked'),
+        checkedData = [],
+        clickTarget = e.target;
+
+      allChecked.each(function handleCheckedItem(i, item) {
+        checkedData.push({
+          name: dom(item).attr('name'),
+          value: dom(item).val()
+        });
+      });
+
+      messageBus.trigger('filters:updated', checkedData);
+    });
+
+    return self;
   }
 
 })(window);
