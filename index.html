@@ -1,0 +1,71 @@
+<html>
+  <head>
+
+  </head>
+
+  <body>
+
+    <div class="main-container">
+
+      <h1>Filter Events Demo</h1>
+
+      <ul class="filter-list">
+        <li>
+          <label for="">
+            <input type="checkbox" value="one" /> One
+          </label>
+        </li>
+        <li>
+          <label for="">
+            <input type="checkbox" value="two" /> Two
+          </label>
+        </li>
+        <li>
+          <label for="">
+            <input type="checkbox" value="three" /> Three
+          </label>
+        </li>
+        <li>
+          <label for="">
+            <input type="checkbox" value="four" /> Four
+          </label>
+        </li>
+      </ul>
+
+      <hr />
+
+      <ul class="message-list"></ul>
+
+    </div>
+
+
+
+    <script src="jquery.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+
+      (function($, demo) {
+
+        $(start);
+
+        function start() {
+
+          var list = demo.MessageList({
+            view: $('.message-list'),
+            dom: $
+          });
+
+          list.render([
+            {
+              message: 'Hello There'
+            }
+          ]);
+        }
+
+      })(jQuery, demo);
+
+    </script>
+  </body>
+</html>
