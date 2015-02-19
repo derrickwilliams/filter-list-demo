@@ -55,12 +55,43 @@
           var list, filters, messageBus;
 
           // faking the messageBus for now
-          messageBus = {
-            trigger: function(name, data) {
-              console.log('message bus triggered', name, data);
-            }
-          };
+          messageBus = (function() {
+            var self, subscribers = {};
 
+            self = {
+              publish: publish,
+              subscribe: subscribe
+            };
+
+            return self;
+
+            function subscribe(topic, subscriber, handler) {
+              subscribers[topic] = subscribers[topic] || [];
+
+              subscribers[topic].push({
+                sub: subscriber,
+                handler: handler
+              });
+
+              return self;
+            }
+
+            function publish(name, data) {
+              console.log('message bus triggered', name, data);
+
+              var targets = subscribers[name];
+
+              if (!targets) {
+                console.log('no targets for ', name);
+                return;
+              }
+
+              targets.forEach(function callTargetHandler(target) {
+                // call the handler function, setting the subscribing argument as the `this` context
+                target.handler.call(target.sub, data);
+              });
+            }
+          })();
 
           list = demo.MessageList({
             view: $('.message-list'),

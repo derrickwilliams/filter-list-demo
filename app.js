@@ -60,7 +60,7 @@
         });
       });
 
-      messageBus.trigger('filters:updated', checkedData);
+      messageBus.publish('filters:updated', checkedData);
     });
 
     return self;
